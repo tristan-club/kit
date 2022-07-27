@@ -41,7 +41,7 @@ func (c *Net) GetPollingInterval() int64 {
 	if c.PollingInterval != 0 {
 		return c.PollingInterval
 	}
-	return int64(10 * time.Second)
+	return 5000
 }
 
 func (c *Net) GetAverageBlockTime() int64 {
@@ -72,31 +72,36 @@ type Chain struct {
 var supportChainList = []*Chain{
 	{
 		ChainType:    ChainTypeBsc,
+		Name:         "BNB Chain",
 		Symbol:       "BNB",
 		CoinDecimals: 18,
 		Type:         NetworkTypeMainNet,
 	},
 	{
+
 		ChainType:    ChainTypeMetis,
+		Name:         "Metis",
 		Symbol:       "Metis",
 		CoinDecimals: 18,
 		Type:         NetworkTypeMainNet,
 	},
 	{
 		ChainType:    ChainTypePolygon,
+		Name:         "Polygon",
 		Symbol:       "Matic",
 		CoinDecimals: 18,
 		Type:         NetworkTypeMainNet,
 	},
 	{
 		ChainType:    ChainTypeKlaytn,
+		Name:         "Klaytn",
 		Symbol:       "KLAY",
 		CoinDecimals: 18,
 		Type:         NetworkTypeMainNet,
-		Name:         "Klaytn",
 	},
 	{
 		ChainType:    ChainTypeOkc,
+		Name:         "OKC",
 		Symbol:       "OKC",
 		CoinDecimals: 18,
 		Type:         NetworkTypeMainNet,
@@ -164,7 +169,7 @@ func init() {
 			//WssUrl:      "wss://andromeda-ws.metis.io",
 			BlockExplorer:    "https://andromeda-explorer.metis.io/",
 			PollingInterval:  1000,
-			AverageBlockTime: 10000,
+			AverageBlockTime: 5000,
 		},
 		{
 			ChainType:     ChainTypeMetis,
@@ -177,7 +182,7 @@ func init() {
 			BlockExplorer: "https://stardust-explorer.metis.io/",
 			//WssUrl:      "wss://stardust-ws.metis.io/",
 			PollingInterval:  1000,
-			AverageBlockTime: 10000,
+			AverageBlockTime: 5000,
 		},
 		{
 			ChainType:        ChainTypePolygon,
@@ -227,24 +232,28 @@ func init() {
 			BlockExplorer: "https://baobab.scope.klaytn.com/",
 		},
 		{
-			ChainType:     ChainTypeOkc,
-			ChainId:       66,
-			Symbol:        "OKT",
-			Decimals:      18,
-			Type:          NetworkTypeMainNet,
-			NetworkName:   "OKC Mainnet",
-			RpcUrl:        "https://exchainrpc.okex.org",
-			BlockExplorer: "https://www.oklink.com/okc/",
+			ChainType:        ChainTypeOkc,
+			ChainId:          66,
+			Symbol:           "OKT",
+			Decimals:         18,
+			Type:             NetworkTypeMainNet,
+			NetworkName:      "OKC Mainnet",
+			RpcUrl:           "https://exchainrpc.okex.org",
+			BlockExplorer:    "https://www.oklink.com/okc/",
+			PollingInterval:  2000,
+			AverageBlockTime: 4000,
 		},
 		{
-			ChainType:     ChainTypeOkc,
-			ChainId:       65,
-			Symbol:        "OKT",
-			Decimals:      18,
-			Type:          NetworkTypeTestNet,
-			NetworkName:   "OKC Testnet",
-			RpcUrl:        "https://exchaintestrpc.okex.org",
-			BlockExplorer: "https://www.oklink.com/okc-test/",
+			ChainType:        ChainTypeOkc,
+			ChainId:          65,
+			Symbol:           "OKT",
+			Decimals:         18,
+			Type:             NetworkTypeTestNet,
+			NetworkName:      "OKC Testnet",
+			RpcUrl:           "https://exchaintestrpc.okex.org",
+			BlockExplorer:    "https://www.oklink.com/okc-test/",
+			PollingInterval:  2000,
+			AverageBlockTime: 4000,
 		},
 	}
 
