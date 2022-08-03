@@ -40,13 +40,30 @@ func Intersect(slice1, slice2 []string) []string {
 	return ans
 }
 
-func IntersectInt(slice1, slice2 []int) []int {
+func Difference(slice1, slice2 []string) []string {
+	m := make(map[string]int)
+	nn := make([]string, 0)
+	inter := Intersect(slice1, slice2)
+	for _, v := range inter {
+		m[v]++
+	}
+
+	for _, value := range slice1 {
+		times, _ := m[value]
+		if times == 0 {
+			nn = append(nn, value)
+		}
+	}
+	return nn
+}
+
+func IntersectInt(slice1, slice2 []int64) []int64 {
 	if len(slice1) > len(slice2) {
 		return IntersectInt(slice2, slice1)
 	}
-	mp := make(map[int]int)
-	mp2 := make(map[int]int)
-	ans := []int{}
+	mp := make(map[int64]int64)
+	mp2 := make(map[int64]int64)
+	ans := []int64{}
 	for _, v := range slice1 {
 		mp[v] = v
 	}
@@ -65,10 +82,10 @@ func IntersectInt(slice1, slice2 []int) []int {
 	return ans
 }
 
-func Difference(slice1, slice2 []string) []string {
-	m := make(map[string]int)
-	nn := make([]string, 0)
-	inter := Intersect(slice1, slice2)
+func DifferenceInt(slice1, slice2 []int64) []int64 {
+	m := make(map[int64]int)
+	nn := make([]int64, 0)
+	inter := IntersectInt(slice1, slice2)
 	for _, v := range inter {
 		m[v]++
 	}
@@ -126,8 +143,8 @@ func RemoveRepString(arr []string) (newArr []string) {
 	return
 }
 
-func RemoveRepInt(arr []int) (newArr []int) {
-	newArr = make([]int, 0)
+func RemoveRepInt(arr []int64) (newArr []int64) {
+	newArr = make([]int64, 0)
 	for i := 0; i < len(arr); i++ {
 		repeat := false
 		for j := i + 1; j < len(arr); j++ {
