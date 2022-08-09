@@ -30,6 +30,10 @@ func init() {
 	}
 }
 
+func SetConsoleWrite() {
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr, TimeFormat: time.RFC3339})
+}
+
 func Error() *zerolog.Event {
 
 	log.With().Caller()

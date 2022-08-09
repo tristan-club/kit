@@ -15,7 +15,7 @@ const (
 	ChainTypeEthereum = 10
 )
 
-var supportChainTypeList = []uint32{ChainTypeBsc, ChainTypeMetis, ChainTypePolygon, ChainTypeOkc}
+var supportChainTypeList = []uint32{ChainTypeBsc, ChainTypeMetis, ChainTypePolygon, ChainTypeKlaytn, ChainTypeOkc}
 
 func GetSupportChainTypeList() []uint32 {
 	return supportChainTypeList
@@ -212,24 +212,28 @@ func init() {
 			//WssUrl:           "wss://rpc-mumbai.matic.today",
 		},
 		{
-			ChainType:     ChainTypeKlaytn,
-			ChainId:       8217,
-			Symbol:        "KLAY",
-			Decimals:      18,
-			Type:          NetworkTypeMainNet,
-			NetworkName:   "Klaytn Cypress",
-			RpcUrl:        "https://public-node-api.klaytnapi.com/v1/cypress",
-			BlockExplorer: "https://scope.klaytn.com/",
+			ChainType:        ChainTypeKlaytn,
+			ChainId:          8217,
+			Symbol:           "KLAY",
+			Decimals:         18,
+			Type:             NetworkTypeMainNet,
+			NetworkName:      "Klaytn Cypress",
+			RpcUrl:           "https://public-node-api.klaytnapi.com/v1/cypress",
+			BlockExplorer:    "https://scope.klaytn.com/",
+			PollingInterval:  750,
+			AverageBlockTime: 1000,
 		},
 		{
-			ChainType:     ChainTypeKlaytn,
-			ChainId:       1001,
-			Symbol:        "KLAY",
-			Decimals:      18,
-			Type:          NetworkTypeTestNet,
-			NetworkName:   "Klaytn Baobab",
-			RpcUrl:        "https://api.baobab.klaytn.net:8651/",
-			BlockExplorer: "https://baobab.scope.klaytn.com/",
+			ChainType:        ChainTypeKlaytn,
+			ChainId:          1001,
+			Symbol:           "KLAY",
+			Decimals:         18,
+			Type:             NetworkTypeTestNet,
+			NetworkName:      "Klaytn Baobab",
+			RpcUrl:           "https://api.baobab.klaytn.net:8651/",
+			BlockExplorer:    "https://baobab.scope.klaytn.com/",
+			PollingInterval:  750,
+			AverageBlockTime: 1000,
 		},
 		{
 			ChainType:        ChainTypeOkc,

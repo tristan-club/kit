@@ -12,7 +12,8 @@ const (
 )
 
 var codeMessageSting = map[int]string{
-	ServerError: "Internal Server Error",
+	ServerError:   "Internal Server Error",
+	BusinessError: "An unexpected error occurred",
 }
 
 type Error interface {
@@ -64,7 +65,7 @@ func NewServerError(code int, msg string, err error) Error {
 		msg = "unknown error"
 	}
 
-	if err != nil {
+	if err == nil {
 		err = fmt.Errorf(msg)
 	}
 
