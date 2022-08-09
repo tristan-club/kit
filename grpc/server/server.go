@@ -58,7 +58,7 @@ func Start(s *grpc.Server, port string) error {
 	}
 
 	reflection.Register(s)
-	log.Info().Msgf("start grpc server at", grpcAddr)
+	log.Info().Msgf("start grpc server at %s", grpcAddr)
 
 	return s.Serve(lis)
 }
