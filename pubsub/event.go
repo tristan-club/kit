@@ -16,7 +16,7 @@ func SendEvent(appId string, uid string, event string, v interface{}) {
 		"app_id":  appId,
 		"user_id": uid,
 		"event":   event,
-		"value":   marshal,
+		"value":   string(marshal),
 	}
 
 	go Publish("", data)
@@ -35,7 +35,7 @@ func SendTagEvent(tag string, appId string, uid string, event string, v interfac
 		"app_id":  appId,
 		"user_id": uid,
 		"event":   event,
-		"value":   marshal,
+		"value":   string(marshal),
 	}
 
 	go Publish(tag, data)
