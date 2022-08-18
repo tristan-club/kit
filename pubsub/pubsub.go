@@ -56,7 +56,7 @@ func PublishTopic(topic string, tag string, data map[string]interface{}) {
 	}
 }
 
-func init() {
+func Init() {
 	if v := os.Getenv("PUBSUB_PROJECT_ID"); v != "" {
 		projectID = v
 	}
