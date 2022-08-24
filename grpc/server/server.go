@@ -8,10 +8,12 @@ import (
 	"github.com/tristan-club/kit/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 	"net"
 	"runtime/debug"
+	"time"
 )
 
 var (
@@ -33,10 +35,18 @@ func Init() *grpc.Server {
 		grpc_recovery.WithRecoveryHandlerContext(customFunc),
 	}
 
+	keepaliveConfig := keepalive.EnforcementPolicy{
+		MinTime:             10 * time.Second,
+		PermitWithoutStream: true,
+	}
+
 	// Create a server. Recovery handlers should typically be last in the chain_info so that other middleware
 	// (e.g. logging) can operate on the recovered state instead of being directly affected by any panic
 
 	grpcServer := grpc.NewServer(
+
+		grpc.KeepaliveEnforcementPolicy(keepaliveConfig),
+
 		grpc_middleware.WithUnaryServerChain(
 			grpc_recovery.UnaryServerInterceptor(opts...),
 			//otgrpc.OpenTracingServerInterceptor(thisTracer),
