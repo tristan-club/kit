@@ -16,11 +16,11 @@ var ctx = context.Background()
 var client *pubsub.Client
 var clientErr error
 
-func Publish(data map[string]interface{}) {
-	PublishTopic(topic, data)
+func Publish(tag string, data map[string]interface{}) {
+	PublishTopic(topic, tag, data)
 }
 
-func PublishTopic(topic string, data map[string]interface{}) {
+func PublishTopic(topic string, tag string, data map[string]interface{}) {
 	if clientErr != nil {
 		log.Error().Msgf("pubsub client error: %s", clientErr)
 		return
@@ -43,7 +43,11 @@ func PublishTopic(topic string, data map[string]interface{}) {
 	t := client.Topic(topic)
 
 	result := t.Publish(context.Background(), &pubsub.Message{
-		Data: marshal})
+		Data: marshal,
+		Attributes: map[string]string{
+			"tag": tag,
+		},
+	})
 
 	_, err = result.Get(context.Background())
 
@@ -52,7 +56,7 @@ func PublishTopic(topic string, data map[string]interface{}) {
 	}
 }
 
-func init() {
+func Init() {
 	if v := os.Getenv("PUBSUB_PROJECT_ID"); v != "" {
 		projectID = v
 	}
