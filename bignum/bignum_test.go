@@ -42,3 +42,7 @@ func TestBigIntCut(t *testing.T) {
 
 	fmt.Println(s)
 }
+
+func TestTrim(t *testing.T) {
+
+}

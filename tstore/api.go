@@ -3,6 +3,7 @@ package tstore
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/tristan-club/kit/grpc/client"
 	"github.com/tristan-club/kit/tstore/pb"
 	"google.golang.org/grpc"
@@ -70,6 +71,9 @@ func PBGet(uid string, path string) ([]byte, error) {
 
 func save(v *pb.SaveParam) (*pb.SaveResp, error) {
 	// 设定请求超时时间 3s
+	if conn == nil {
+		return nil, fmt.Errorf("tstore svc not init")
+	}
 	cli := pb.NewTStoreServiceClient(conn)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
@@ -79,6 +83,9 @@ func save(v *pb.SaveParam) (*pb.SaveResp, error) {
 
 func fetch(uid string, path string) (*pb.FetchResp, error) {
 	cli := pb.NewTStoreServiceClient(conn)
+	if conn == nil {
+		return nil, fmt.Errorf("tstore svc not init")
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	return cli.Fetch(ctx, &pb.FetchParam{

@@ -302,3 +302,17 @@ func GetNetByChainId(chainId uint64) *Net {
 	}
 	return nil
 }
+
+func GetNetByChainType(chainType uint32) *Net {
+	netType := NetworkTypeMainNet
+	if os.Getenv("IS_TEST_NET") == "1" {
+		netType = NetworkTypeTestNet
+	}
+
+	for _, net := range supportChainNetList {
+		if net.ChainType == chainType && net.Type == uint8(netType) {
+			return net
+		}
+	}
+	return &Net{ChainType: chainType}
+}
