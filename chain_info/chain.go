@@ -214,7 +214,7 @@ func init() {
 			Type:             NetworkTypeTestNet,
 			NetworkName:      "Polygon TestNet",
 			RpcUrl:           "https://matic-mumbai.chainstacklabs.com",
-			PollingInterval:  750,
+			PollingInterval:  1000,
 			AverageBlockTime: 2000,
 			BlockExplorer:    "https://mumbai.polygonscan.com/",
 			//WssUrl:           "wss://rpc-mumbai.matic.today",
@@ -228,7 +228,7 @@ func init() {
 			NetworkName:      "Klaytn Cypress",
 			RpcUrl:           "https://public-node-api.klaytnapi.com/v1/cypress",
 			BlockExplorer:    "https://scope.klaytn.com/",
-			PollingInterval:  750,
+			PollingInterval:  1000,
 			AverageBlockTime: 1000,
 		},
 		{
@@ -276,7 +276,7 @@ func init() {
 			NetworkName:      "Evmos Mainnet",
 			RpcUrl:           "https://eth.bd.evmos.org:8545",
 			BlockExplorer:    "https://evm.evmos.org/",
-			PollingInterval:  750,
+			PollingInterval:  1000,
 			AverageBlockTime: 1900,
 		},
 		{
@@ -288,7 +288,7 @@ func init() {
 			NetworkName:      "Evmos Testnet",
 			RpcUrl:           "https://eth.bd.evmos.dev:8545",
 			BlockExplorer:    "https://evm.evmos.dev/",
-			PollingInterval:  750,
+			PollingInterval:  1000,
 			AverageBlockTime: 1900,
 		},
 	}

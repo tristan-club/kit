@@ -5,6 +5,7 @@ go 1.16
 require (
 	cloud.google.com/go/pubsub v1.20.0
 	github.com/bwmarrin/snowflake v0.3.0
+	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/rs/zerolog v1.27.0
 	github.com/trustwallet/go-primitives v0.0.55
