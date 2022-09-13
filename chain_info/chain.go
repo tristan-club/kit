@@ -293,7 +293,7 @@ func init() {
 		},
 	}
 
-	if os.Getenv("ENV") != "dev" {
+	if os.Getenv("IGNORE_NODE_BALANCE") != "1" {
 		for k, _ := range supportChainNetList {
 			supportChainNetList[k].RpcUrl = fmt.Sprintf("http://node-balance-svc/%d", supportChainNetList[k].ChainId)
 		}
