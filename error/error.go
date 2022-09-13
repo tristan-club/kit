@@ -53,7 +53,6 @@ func (e *errorImpl) HttpCode() int {
 }
 
 func NewServerError(code int, msg string, err error) Error {
-
 	if code == 0 {
 		code = ServerError
 	}

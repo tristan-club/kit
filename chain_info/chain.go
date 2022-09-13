@@ -12,10 +12,11 @@ const (
 	ChainTypePolygon  = 3
 	ChainTypeKlaytn   = 4
 	ChainTypeOkc      = 5
+	ChainTypeEvmos    = 6
 	ChainTypeEthereum = 10
 )
 
-var supportChainTypeList = []uint32{ChainTypeBsc, ChainTypeMetis, ChainTypePolygon, ChainTypeKlaytn, ChainTypeOkc}
+var supportChainTypeList = []uint32{ChainTypeBsc, ChainTypeMetis, ChainTypePolygon, ChainTypeKlaytn, ChainTypeOkc, ChainTypeEvmos}
 
 func GetSupportChainTypeList() []uint32 {
 	return supportChainTypeList
@@ -103,6 +104,13 @@ var supportChainList = []*Chain{
 		ChainType:    ChainTypeOkc,
 		Name:         "OKC",
 		Symbol:       "OKC",
+		CoinDecimals: 18,
+		Type:         NetworkTypeMainNet,
+	},
+	{
+		ChainType:    ChainTypeEvmos,
+		Name:         "EVMOS",
+		Symbol:       "EVMOS",
 		CoinDecimals: 18,
 		Type:         NetworkTypeMainNet,
 	},
@@ -258,6 +266,30 @@ func init() {
 			BlockExplorer:    "https://www.oklink.com/okc-test/",
 			PollingInterval:  2000,
 			AverageBlockTime: 4000,
+		},
+		{
+			ChainType:        ChainTypeEvmos,
+			ChainId:          9001,
+			Symbol:           "EVMOS",
+			Decimals:         18,
+			Type:             NetworkTypeMainNet,
+			NetworkName:      "Evmos Mainnet",
+			RpcUrl:           "https://eth.bd.evmos.org:8545",
+			BlockExplorer:    "https://evm.evmos.org/",
+			PollingInterval:  750,
+			AverageBlockTime: 1900,
+		},
+		{
+			ChainType:        ChainTypeEvmos,
+			ChainId:          9000,
+			Symbol:           "EVMOS",
+			Decimals:         18,
+			Type:             NetworkTypeTestNet,
+			NetworkName:      "Evmos Testnet",
+			RpcUrl:           "https://eth.bd.evmos.dev:8545",
+			BlockExplorer:    "https://evm.evmos.dev/",
+			PollingInterval:  750,
+			AverageBlockTime: 1900,
 		},
 	}
 
