@@ -110,7 +110,7 @@ var supportChainList = []*Chain{
 	},
 	{
 		ChainType:    ChainTypeEvmos,
-		Name:         "EVMOS",
+		Name:         "Evmos",
 		Symbol:       "EVMOS",
 		CoinDecimals: 18,
 		Type:         NetworkTypeMainNet,
