@@ -2,6 +2,7 @@ package chain_info
 
 import (
 	"fmt"
+	"github.com/tristan-club/kit/log"
 	"os"
 	"time"
 )
@@ -122,6 +123,7 @@ func GetChainInfo(chainType uint32) *Chain {
 			return v
 		}
 	}
+	log.Error().Msgf("get chain info invalid chain type param %d", chainType)
 
 	return &Chain{
 		ChainType:    0,
@@ -332,7 +334,8 @@ func GetNetByChainId(chainId uint64) *Net {
 			return v
 		}
 	}
-	return nil
+	log.Info().Msgf("get net invalid chain id param %d", chainId)
+	return &Net{ChainType: 0, ChainId: 0}
 }
 
 func GetNetByChainType(chainType uint32) *Net {
@@ -346,5 +349,6 @@ func GetNetByChainType(chainType uint32) *Net {
 			return net
 		}
 	}
+	log.Info().Msgf("get net invalid chain type param %d", chainType)
 	return &Net{ChainType: chainType}
 }
