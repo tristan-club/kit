@@ -14,10 +14,11 @@ const (
 	ChainTypeKlaytn   = 4
 	ChainTypeOkc      = 5
 	ChainTypeEvmos    = 6
+	ChainTypeCronos   = 7
 	ChainTypeEthereum = 10
 )
 
-var supportChainTypeList = []uint32{ChainTypeBsc, ChainTypeMetis, ChainTypePolygon, ChainTypeKlaytn, ChainTypeOkc, ChainTypeEvmos}
+var supportChainTypeList = []uint32{ChainTypeBsc, ChainTypeMetis, ChainTypePolygon, ChainTypeKlaytn, ChainTypeOkc, ChainTypeEvmos, ChainTypeCronos}
 
 func GetSupportChainTypeList() []uint32 {
 	return supportChainTypeList
@@ -112,6 +113,13 @@ var supportChainList = []*Chain{
 		ChainType:    ChainTypeEvmos,
 		Name:         "Evmos",
 		Symbol:       "EVMOS",
+		CoinDecimals: 18,
+		Type:         NetworkTypeMainNet,
+	},
+	{
+		ChainType:    ChainTypeCronos,
+		Name:         "Cronos",
+		Symbol:       "CRO",
 		CoinDecimals: 18,
 		Type:         NetworkTypeMainNet,
 	},
@@ -292,6 +300,30 @@ func init() {
 			BlockExplorer:    "https://evm.evmos.dev/",
 			PollingInterval:  1000,
 			AverageBlockTime: 1900,
+		},
+		{
+			ChainType:        ChainTypeCronos,
+			ChainId:          25,
+			Symbol:           "CRO",
+			Decimals:         18,
+			Type:             NetworkTypeMainNet,
+			NetworkName:      "Cronos Mainnet",
+			RpcUrl:           "https://evm.cronos.org",
+			BlockExplorer:    "https://cronoscan.com/",
+			PollingInterval:  2000,
+			AverageBlockTime: 4000,
+		},
+		{
+			ChainType:        ChainTypeCronos,
+			ChainId:          338,
+			Symbol:           "CRO",
+			Decimals:         18,
+			Type:             NetworkTypeTestNet,
+			NetworkName:      "Cronos Testnet",
+			RpcUrl:           "https://evm-t3.cronos.org",
+			BlockExplorer:    "https://testnet.cronoscan.com/",
+			PollingInterval:  2000,
+			AverageBlockTime: 4000,
 		},
 	}
 
