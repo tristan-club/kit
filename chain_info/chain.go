@@ -15,10 +15,11 @@ const (
 	ChainTypeOkc      = 5
 	ChainTypeEvmos    = 6
 	ChainTypeCronos   = 7
+	ChainTypeAurora   = 8
 	ChainTypeEthereum = 10
 )
 
-var supportChainTypeList = []uint32{ChainTypeBsc, ChainTypeMetis, ChainTypePolygon, ChainTypeKlaytn, ChainTypeOkc, ChainTypeEvmos, ChainTypeCronos}
+var supportChainTypeList = []uint32{ChainTypeBsc, ChainTypeMetis, ChainTypePolygon, ChainTypeKlaytn, ChainTypeOkc, ChainTypeEvmos, ChainTypeCronos, ChainTypeAurora}
 
 func GetSupportChainTypeList() []uint32 {
 	return supportChainTypeList
@@ -120,6 +121,13 @@ var supportChainList = []*Chain{
 		ChainType:    ChainTypeCronos,
 		Name:         "Cronos",
 		Symbol:       "CRO",
+		CoinDecimals: 18,
+		Type:         NetworkTypeMainNet,
+	},
+	{
+		ChainType:    ChainTypeAurora,
+		Name:         "Aurora",
+		Symbol:       "ETH",
 		CoinDecimals: 18,
 		Type:         NetworkTypeMainNet,
 	},
@@ -325,6 +333,30 @@ func init() {
 			PollingInterval:  2000,
 			AverageBlockTime: 4000,
 		},
+		{
+			ChainType:        ChainTypeAurora,
+			ChainId:          1313161554,
+			Symbol:           "ETH",
+			Decimals:         18,
+			Type:             NetworkTypeMainNet,
+			NetworkName:      "Aurora Mainnet",
+			RpcUrl:           "https://mainnet.aurora.dev",
+			BlockExplorer:    "https://aurorascan.dev/",
+			PollingInterval:  1000,
+			AverageBlockTime: 1000,
+		},
+		{
+			ChainType:        ChainTypeAurora,
+			ChainId:          1313161555,
+			Symbol:           "ETH",
+			Decimals:         18,
+			Type:             NetworkTypeTestNet,
+			NetworkName:      "Aurora Testnet",
+			RpcUrl:           "https://testnet.aurora.dev",
+			BlockExplorer:    "https://testnet.aurorascan.dev/",
+			PollingInterval:  1000,
+			AverageBlockTime: 1000,
+		},
 	}
 
 	if os.Getenv("IGNORE_NODE_BALANCE") != "1" {
@@ -340,6 +372,9 @@ func init() {
 				}
 				if supportChainNetList[k].ChainId == 137 {
 					supportChainNetList[k].RpcUrl = fmt.Sprintf("https://matic.getblock.io/mainnet/?api_key=%s", blockIOProvider)
+				}
+				if supportChainNetList[k].ChainId == 25 {
+					supportChainNetList[k].RpcUrl = fmt.Sprintf("https://cro.getblock.io/mainnet/?api_key=%s", blockIOProvider)
 				}
 			}
 		}
