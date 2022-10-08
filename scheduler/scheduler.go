@@ -7,10 +7,13 @@ import (
 	"github.com/tristan-club/kit/config"
 	"github.com/tristan-club/kit/log"
 	"github.com/tristan-club/kit/rds"
+	"os"
 	"time"
 )
 
 type ScheduleHandler func(id string, data interface{})
+
+var ServiceName = ""
 
 func Schedule(delay time.Duration, data interface{}) error {
 	c := rds.GetClient()
@@ -31,7 +34,7 @@ func Schedule(delay time.Duration, data interface{}) error {
 
 	_ = c.Send("set", config.RedisScheduleDataKey(jobId), dataJson)
 
-	_ = c.Send("zadd", config.RedisScheduleJobKey(), time.Now().Add(delay).Unix(), jobId)
+	_ = c.Send("zadd", config.RedisScheduleJobKey(ServiceName), time.Now().Add(delay).Unix(), jobId)
 
 	_, err = c.Do("exec")
 
@@ -52,7 +55,7 @@ func delJob(JobId string) {
 
 	_ = c.Send("del", config.RedisScheduleDataKey(JobId))
 
-	_ = c.Send("zrem", config.RedisScheduleJobKey(), JobId)
+	_ = c.Send("zrem", config.RedisScheduleJobKey(ServiceName), JobId)
 
 	_, err := c.Do("exec")
 
@@ -106,7 +109,7 @@ func Run(handler ScheduleHandler) {
 		case _ = <-time.After(time.Second):
 		}
 
-		reply, err := redis.Strings(rds.Do("ZRANGEBYSCORE", config.RedisScheduleJobKey(), 0, time.Now().Unix()))
+		reply, err := redis.Strings(rds.Do("ZRANGEBYSCORE", config.RedisScheduleJobKey(ServiceName), 0, time.Now().Unix()))
 
 		if err != nil {
 			log.Error().Str("type", "schedule").Err(err)
@@ -116,5 +119,11 @@ func Run(handler ScheduleHandler) {
 		for _, jobId := range reply {
 			runSchedule(jobId, handler)
 		}
+	}
+}
+
+func init() {
+	if ServiceName = os.Getenv("SCHEDULER_SERVICE_NAME"); ServiceName == "" {
+		log.Panic().Msgf("SCHEDULER_SERVICE_NAME is not set. ie: export SCHEDULER_SERVICE_NAME=alliance-bot")
 	}
 }

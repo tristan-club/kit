@@ -33,7 +33,17 @@ func init() {
 func SetConsoleWrite() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr, TimeFormat: time.RFC3339})
 }
+func Panic() *zerolog.Event {
 
+	log.With().Caller()
+
+	_, file, line, ok := runtime.Caller(1)
+	e := log.Panic()
+	if ok {
+		e = e.Str("line", file+":"+strconv.Itoa(line))
+	}
+	return e
+}
 func Error() *zerolog.Event {
 
 	log.With().Caller()

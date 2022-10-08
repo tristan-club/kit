@@ -44,6 +44,6 @@ func RedisScheduleLockKey(id string) string {
 	return "job_lock_" + id
 }
 
-func RedisScheduleJobKey() string {
-	return "job_schedule"
+func RedisScheduleJobKey(ServiceName string) string {
+	return "job_schedule_" + ServiceName
 }
