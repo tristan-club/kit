@@ -69,11 +69,6 @@ func Run(handler ScheduleHandler) {
 
 		log.Info().Str("type", "schedule").Msgf("get Job %s", jobId)
 
-		defer func() {
-			delJob(jobId)
-			_ = rds.UnLock(config.RedisScheduleLockKey(jobId))
-		}()
-
 		bytes, err := redis.Bytes(rds.Do("get", config.RedisScheduleDataKey(jobId)))
 		if err != nil {
 			log.Error().
@@ -98,10 +93,12 @@ func Run(handler ScheduleHandler) {
 			log.Error().
 				Str("type", "data").
 				Err(err).Send()
-			return
+		} else {
+			handler(jobId, data)
 		}
 
-		handler(jobId, data)
+		delJob(jobId)
+		_ = rds.UnLock(config.RedisScheduleLockKey(jobId))
 	}
 
 	for {
