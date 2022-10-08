@@ -35,3 +35,15 @@ func GetDingDingToken() string {
 func GetDingDingAppKeyAndSecret() (string, string) {
 	return os.Getenv("DINGDING_APP_KEY"), os.Getenv("DINGDING_SECRET")
 }
+
+func RedisScheduleDataKey(id string) string {
+	return "job_data_" + id
+}
+
+func RedisScheduleLockKey(id string) string {
+	return "job_lock_" + id
+}
+
+func RedisScheduleJobKey() string {
+	return "job_schedule"
+}
