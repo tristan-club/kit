@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type ScheduleHandler func(id string, data []byte)
+type ScheduleHandler func(id string, data interface{})
 
 func Schedule(delay time.Duration, data interface{}) error {
 	c := rds.GetClient()
@@ -66,13 +66,16 @@ func Run(handler ScheduleHandler) {
 
 		log.Info().Str("type", "schedule").Msgf("get Job %s", jobId)
 
+		defer func() {
+			delJob(jobId)
+			_ = rds.UnLock(config.RedisScheduleLockKey(jobId))
+		}()
+
 		bytes, err := redis.Bytes(rds.Do("get", config.RedisScheduleDataKey(jobId)))
 		if err != nil {
 			log.Error().
 				Str("type", "schedule").
 				Err(err).Send()
-
-			delJob(jobId)
 			return
 		}
 
@@ -82,15 +85,20 @@ func Run(handler ScheduleHandler) {
 			log.Info().
 				Str("type", "schedule").
 				Msgf("lock Job %s failed, job is being processed by another process", jobId)
-
-			delJob(jobId)
 			return
 		}
 
-		handler(jobId, bytes)
+		var data interface{}
+		err = json.Unmarshal(bytes, &data)
 
-		delJob(jobId)
-		_ = rds.UnLock(config.RedisScheduleLockKey(jobId))
+		if err != nil {
+			log.Error().
+				Str("type", "data").
+				Err(err).Send()
+			return
+		}
+
+		handler(jobId, data)
 	}
 
 	for {
