@@ -61,7 +61,7 @@ func delJob(JobId string) {
 	}
 }
 
-func LoopResume(handler ScheduleHandler) {
+func Run(handler ScheduleHandler) {
 	runSchedule := func(jobId string, handler ScheduleHandler) {
 
 		log.Info().Str("type", "schedule").Msgf("get Job %s", jobId)
@@ -77,7 +77,7 @@ func LoopResume(handler ScheduleHandler) {
 		}
 
 		err = rds.Lock(config.RedisScheduleLockKey(jobId), time.Hour)
-		// lock failed, Job is been running by another process
+		// lock failed, Job has been run by another process
 		if err != nil {
 			log.Info().
 				Str("type", "schedule").
