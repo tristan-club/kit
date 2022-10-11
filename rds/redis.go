@@ -39,6 +39,10 @@ func Connect(host string) {
 	}
 }
 
+func IsConnected() bool {
+	return redisClient != nil
+}
+
 func GetClient() redis.Conn {
 	if debug {
 		log.Debug().Str("type", "redis").Msgf("status %v", redisClient.Stats())
