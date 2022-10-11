@@ -125,7 +125,7 @@ func (s *Scheduler) Run(handler ScheduleHandler) {
 		}
 
 		for _, jobId := range reply {
-			runSchedule(jobId, handler)
+			go runSchedule(jobId, handler)
 		}
 	}
 }
