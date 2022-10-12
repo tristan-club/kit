@@ -1,6 +1,7 @@
 package scheduler
 
 import (
+	"bytes"
 	"encoding/json"
 	"github.com/gomodule/redigo/redis"
 	uuid "github.com/satori/go.uuid"
@@ -80,7 +81,7 @@ func (s *Scheduler) Run(handler ScheduleHandler) {
 
 		log.Info().Str("type", "schedule").Msgf("get Job %s", jobId)
 
-		bytes, err := redis.Bytes(rds.Do("get", config.RedisScheduleDataKey(jobId)))
+		b, err := redis.Bytes(rds.Do("get", config.RedisScheduleDataKey(jobId)))
 		if err != nil {
 			log.Error().
 				Str("type", "schedule").
@@ -97,8 +98,11 @@ func (s *Scheduler) Run(handler ScheduleHandler) {
 			return
 		}
 
+		decoder := json.NewDecoder(bytes.NewBuffer(b))
+		decoder.UseNumber()
+
 		var data interface{}
-		err = json.Unmarshal(bytes, &data)
+		err = decoder.Decode(&data)
 
 		if err != nil {
 			log.Error().
