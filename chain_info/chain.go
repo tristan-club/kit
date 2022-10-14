@@ -32,6 +32,7 @@ type Net struct {
 	Symbol           string `json:"symbol"`
 	Decimals         uint8  `json:"decimals"`
 	RpcUrl           string `json:"rpc_url"`
+	OriginRpcUrl     string `json:"origin_rpc_url"`
 	WssUrl           string `json:"-"`
 	BlockExplorer    string `json:"block_explorer"`
 	ExplorerApiUrl   string `json:"-"`
@@ -361,6 +362,7 @@ func init() {
 
 	if os.Getenv("IGNORE_NODE_BALANCE") != "1" {
 		for k, _ := range supportChainNetList {
+			supportChainNetList[k].OriginRpcUrl = supportChainNetList[k].RpcUrl
 			supportChainNetList[k].RpcUrl = fmt.Sprintf("http://node-balance-svc/%d", supportChainNetList[k].ChainId)
 		}
 	} else {
