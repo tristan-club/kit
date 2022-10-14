@@ -32,10 +32,10 @@ type Net struct {
 	Symbol           string `json:"symbol"`
 	Decimals         uint8  `json:"decimals"`
 	RpcUrl           string `json:"rpc_url"`
-	WssUrl           string `json:"wss_url"`
+	WssUrl           string `json:"-"`
 	BlockExplorer    string `json:"block_explorer"`
-	ExplorerApiUrl   string `json:"explorer_api_url"`
-	ExplorerApiKey   string `json:"explorer_api_key"`
+	ExplorerApiUrl   string `json:"-"`
+	ExplorerApiKey   string `json:"-"`
 	Type             uint8  `json:"type"`
 	PollingInterval  int64  `json:"polling_interval"`
 	AverageBlockTime int64  `json:"average_block_time"`
