@@ -47,3 +47,7 @@ func RedisScheduleLockKey(id string) string {
 func RedisScheduleJobKey(ServiceName string) string {
 	return "job_schedule_" + ServiceName
 }
+
+func GetDingConfig() (string, string) {
+	return os.Getenv("DING_TOKEN"), os.Getenv("DING_SECRET")
+}
