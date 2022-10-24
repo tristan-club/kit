@@ -55,6 +55,11 @@ func sign(t int64, secret string) string {
 }
 
 func (robot *Robot) SendMessage(msg interface{}) error {
+
+	if config.IgnoreDingMsg() {
+		return nil
+	}
+
 	body := bytes.NewBuffer(nil)
 	err := json.NewEncoder(body).Encode(msg)
 	if err != nil {

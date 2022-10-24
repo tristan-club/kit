@@ -36,6 +36,10 @@ func GetDingDingAppKeyAndSecret() (string, string) {
 	return os.Getenv("DINGDING_APP_KEY"), os.Getenv("DINGDING_SECRET")
 }
 
+func IgnoreDingMsg() bool {
+	return os.Getenv("DINGDING_IGNORE") == "1"
+}
+
 func RedisScheduleDataKey(id string) string {
 	return "job_data_" + id
 }
