@@ -67,9 +67,9 @@ func (e *errorImpl) Encode() error {
 	return fmt.Errorf(e.String())
 }
 
-func ParseError(err error) Error {
+func DecodeError(err error) Error {
 	if err == nil {
-		return NewServerError(ServerError, "", nil)
+		return nil
 	}
 	var herr Error
 	if marshalErr := json.Unmarshal([]byte(err.Error()), &herr); marshalErr != nil {
