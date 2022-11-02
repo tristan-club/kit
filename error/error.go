@@ -1,6 +1,7 @@
 package error
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -22,34 +23,59 @@ type Error interface {
 	Code() int
 	Msg() string
 	HttpCode() int
+	String() string
+	Encode() error
 }
 
 type errorImpl struct {
-	errorType int
-	code      int
-	msg       string // User readable information
-	error     error  // Developer debugging information
-	httpCode  int    // Http status code
+	ErrType     int
+	ErrCode     int
+	ErrMsg      string // User readable information
+	Err         error  // Developer debugging information
+	ErrHttpCode int    // Http status code
 }
 
 func (e *errorImpl) Error() string {
-	return e.error.Error()
+	return e.Err.Error()
 }
 
 func (e *errorImpl) Code() int {
-	return e.code
+	return e.ErrCode
 }
 
 func (e *errorImpl) Msg() string {
-	return e.msg
+	return e.ErrMsg
 }
 
 func (e *errorImpl) ErrorType() int {
-	return e.errorType
+	return e.ErrType
 }
 
 func (e *errorImpl) HttpCode() int {
-	return e.httpCode
+	return e.ErrHttpCode
+}
+
+func (e *errorImpl) String() string {
+	b, err := json.Marshal(e)
+	if err != nil {
+		return e.Error()
+	}
+	return string(b)
+}
+
+func (e *errorImpl) Encode() error {
+	return fmt.Errorf(e.String())
+}
+
+func ParseError(err error) Error {
+	if err == nil {
+		return NewServerError(ServerError, "", nil)
+	}
+	var herr Error
+	if marshalErr := json.Unmarshal([]byte(err.Error()), &herr); marshalErr != nil {
+		herr = NewServerError(ServerError, "", err)
+	}
+	return herr
 }
 
 func NewServerError(code int, msg string, err error) Error {
@@ -61,7 +87,7 @@ func NewServerError(code int, msg string, err error) Error {
 		msg = CodeToMessage(code)
 	}
 	if msg == "" {
-		msg = "unknown error"
+		msg = fmt.Sprintf("unknown error, code %d", code)
 	}
 
 	if err == nil {
@@ -90,15 +116,15 @@ func NewBusinessError(code int, msg string, err error) Error {
 
 func NewError(code int, msg string, err error, errType int) Error {
 	e := &errorImpl{
-		code:      code,
-		error:     err,
-		msg:       msg,
-		errorType: errType,
+		ErrCode: code,
+		Err:     err,
+		ErrMsg:  msg,
+		ErrType: errType,
 	}
 	if text := http.StatusText(code); text != "" {
-		e.httpCode = code
+		e.ErrHttpCode = code
 	} else {
-		e.httpCode = http.StatusOK
+		e.ErrHttpCode = http.StatusOK
 	}
 
 	return e

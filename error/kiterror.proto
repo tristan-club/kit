@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "tristan-club/kit/error_pb/;error_pb";
+
+
+message KitError {
+  int32 code = 1;
+  int32 error_type = 2;
+  string message = 3;
+  string detail = 4;
+}
+
