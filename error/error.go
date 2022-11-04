@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -28,15 +30,15 @@ type Error interface {
 }
 
 type errorImpl struct {
-	ErrType     int
-	ErrCode     int
-	ErrMsg      string // User readable information
-	Err         error  // Developer debugging information
-	ErrHttpCode int    // Http status code
+	ErrType     int    `json:"err_type"`
+	ErrCode     int    `json:"err_code"`
+	ErrMsg      string `json:"err_msg"`       // User readable information
+	ErrDetail   string `json:"err_detail"`    // Developer debugging information
+	ErrHttpCode int    `json:"err_http_code"` // Http status code
 }
 
 func (e *errorImpl) Error() string {
-	return e.Err.Error()
+	return e.ErrDetail
 }
 
 func (e *errorImpl) Code() int {
@@ -71,9 +73,21 @@ func DecodeError(err error) Error {
 	if err == nil {
 		return nil
 	}
-	var herr Error
-	if marshalErr := json.Unmarshal([]byte(err.Error()), &herr); marshalErr != nil {
-		herr = NewServerError(ServerError, "", err)
+	var herr *errorImpl
+	errText := err.Error()
+	if strings.Contains(errText, "rpc error") && strings.Contains(errText, "err_msg") && strings.Contains(errText, "err_type") {
+		i := strings.Index(errText, "{")
+		j := strings.LastIndex(errText, "}")
+		if j > i && i > 0 && j+1 == len(errText) {
+			errText = errText[i : j+1]
+		}
+	}
+
+	if marshalErr := json.Unmarshal([]byte(errText), &herr); marshalErr != nil {
+		unquoteErrText, _ := strconv.Unquote("\"" + errText + "\"")
+		if marshalErr = json.Unmarshal([]byte(unquoteErrText), &herr); marshalErr != nil {
+			herr = &errorImpl{ErrCode: ServerError, ErrType: ServerError, ErrMsg: CodeToMessage(ServerError), ErrDetail: err.Error()}
+		}
 	}
 	return herr
 }
@@ -115,11 +129,16 @@ func NewBusinessError(code int, msg string, err error) Error {
 }
 
 func NewError(code int, msg string, err error, errType int) Error {
+
 	e := &errorImpl{
-		ErrCode: code,
-		Err:     err,
-		ErrMsg:  msg,
-		ErrType: errType,
+		ErrCode:   code,
+		ErrDetail: "",
+		ErrMsg:    msg,
+		ErrType:   errType,
+	}
+
+	if err != nil {
+		e.ErrDetail = err.Error()
 	}
 	if text := http.StatusText(code); text != "" {
 		e.ErrHttpCode = code
