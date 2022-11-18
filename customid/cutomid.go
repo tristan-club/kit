@@ -37,13 +37,16 @@ func (c *CustomId) GetCallbackType() int32 {
 }
 
 func (c *CustomId) String() string {
-	return fmt.Sprintf("%d/%s/%d", c.ct, c.id, c.cbt)
+	return fmt.Sprintf("%d_%s_%d", c.ct, c.id, c.cbt)
 }
 
 func ParseCustomId(ciStr string) (*CustomId, bool) {
-	a := strings.Split(ciStr, "/")
+	a := strings.Split(ciStr, "_")
 	if len(a) != 3 {
-		return nil, false
+		a = strings.Split(ciStr, "/")
+		if len(a) != 3 {
+			return nil, false
+		}
 	}
 
 	ct, _ := strconv.ParseInt(a[0], 10, 64)
