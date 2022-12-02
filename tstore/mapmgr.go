@@ -54,10 +54,10 @@ func (m *MapManger) Fetch(uid, path string, key string) *MapManger {
 			msg = fmt.Sprintf("unknown fetch error, code: %d", v.Code)
 		}
 		m.err = fmt.Errorf(msg)
+	} else {
+		m.value = v.IValue
+		m.key = key
 	}
-
-	m.value = v.IValue
-	m.key = key
 
 	return m
 }
