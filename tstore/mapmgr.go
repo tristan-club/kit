@@ -3,6 +3,7 @@ package tstore
 import (
 	"fmt"
 	"github.com/tristan-club/kit/tstore/pb"
+	"reflect"
 )
 
 type MapManger struct {
@@ -62,10 +63,16 @@ func (m *MapManger) Fetch(uid, path string, key string) *MapManger {
 }
 
 func (m *MapManger) Scan(dest interface{}) *MapManger {
+
 	if m.err != nil {
 		return m
 	} else if m.value == nil {
-		m.err = fmt.Errorf("record not found")
+		return m
+	}
+
+	if dest == nil || (reflect.ValueOf(dest).Kind() == reflect.Ptr && reflect.ValueOf(dest).IsNil()) {
+		m.err = fmt.Errorf("invalid scan dest")
+		return m
 	}
 
 	switch dest.(type) {
@@ -84,6 +91,9 @@ func (m *MapManger) Scan(dest interface{}) *MapManger {
 func (m *MapManger) GetStrValue() (string, error) {
 	if m.key == "" {
 		return "", fmt.Errorf("path not set")
+	}
+	if m.value == nil {
+		return "", nil
 	}
 	return m.value.GetStrValue(), nil
 }

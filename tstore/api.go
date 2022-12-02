@@ -7,7 +7,6 @@ import (
 	"github.com/tristan-club/kit/grpc/client"
 	"github.com/tristan-club/kit/tstore/pb"
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/proto"
 	"time"
 )
 
@@ -18,7 +17,7 @@ func InitTStore(svc string) (err error) {
 	return err
 }
 
-func PBSave(uid string, path string, value proto.Message) error {
+func PBSave(uid string, path string, value interface{}) error {
 
 	_, err := save(&pb.SaveParam{
 		Uid:    uid,
@@ -50,6 +49,20 @@ func PBGetStr(uid string, path string) (string, error) {
 		return "", errors.New("pb get error")
 	}
 	return v.IValue.StrValue, nil
+}
+
+func PBGetInt(uid string, path string) (int64, error) {
+	v, err := fetch(uid, path)
+	if err != nil {
+		return 0, err
+	}
+	if v.Code == 404 {
+		return 0, nil
+	}
+	if v.IValue.Itype != pb.IValue_int || v.Code != CodeSuccess {
+		return 0, errors.New("pb get error")
+	}
+	return int64(v.IValue.IntValue), nil
 }
 
 func PBGet(uid string, path string) ([]byte, error) {
