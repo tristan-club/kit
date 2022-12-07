@@ -42,6 +42,7 @@ func (m *MapManger) Fetch(uid, path string, key string) *MapManger {
 
 	if key != "" {
 		path = fmt.Sprintf("%s.%s", path, key)
+		m.key = key
 	}
 
 	v, err := fetch(uid, path)
@@ -56,7 +57,6 @@ func (m *MapManger) Fetch(uid, path string, key string) *MapManger {
 		m.err = fmt.Errorf(msg)
 	} else {
 		m.value = v.IValue
-		m.key = key
 	}
 
 	return m
