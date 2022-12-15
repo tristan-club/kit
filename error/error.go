@@ -73,7 +73,7 @@ func DecodeError(err error) Error {
 	if err == nil {
 		return nil
 	}
-	var herr *errorImpl
+	herr := &errorImpl{}
 	errText := err.Error()
 	if strings.Contains(errText, "rpc error") && strings.Contains(errText, "err_msg") && strings.Contains(errText, "err_type") {
 		i := strings.Index(errText, "{")
@@ -86,7 +86,7 @@ func DecodeError(err error) Error {
 	if marshalErr := json.Unmarshal([]byte(errText), &herr); marshalErr != nil {
 		unquoteErrText, _ := strconv.Unquote("\"" + errText + "\"")
 		if marshalErr = json.Unmarshal([]byte(unquoteErrText), &herr); marshalErr != nil {
-			herr = &errorImpl{ErrCode: ServerError, ErrType: ServerError, ErrMsg: CodeToMessage(ServerError), ErrDetail: err.Error()}
+			herr = &errorImpl{ErrCode: ServerError, ErrType: ServerError, ErrHttpCode: http.StatusInternalServerError, ErrMsg: CodeToMessage(ServerError), ErrDetail: errText}
 		}
 	}
 	return herr
