@@ -1,6 +1,7 @@
 package tstore
 
 import (
+	"context"
 	"fmt"
 	"github.com/tristan-club/kit/tstore/pb"
 	"reflect"
@@ -36,6 +37,23 @@ func (m *MapManger) BatchSave(uid, path string, param map[string]interface{}) er
 	}
 
 	return m.Save(uid, path, "", param)
+}
+
+func (m *MapManger) Keys(uid, path string) (ks []string, err error) {
+	cli := pb.NewTStoreServiceClient(conn)
+	if conn == nil {
+		return nil, fmt.Errorf("tstore svc not init")
+	}
+	var resp *pb.FetchResp
+	resp, err = cli.Keys(context.Background(), &pb.FetchParam{Uid: uid, Path: path})
+	if err != nil {
+		return
+	} else if resp.Code == 404 {
+		return
+	} else if resp.Code != CodeSuccess {
+		return nil, fmt.Errorf("fetch keys error: %s", resp.Msg)
+	}
+	return resp.Keys, nil
 }
 
 func (m *MapManger) Fetch(uid, path string, key string) *MapManger {
