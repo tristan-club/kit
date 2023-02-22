@@ -29,7 +29,7 @@ type Error interface {
 	Encode() error
 }
 
-type errorImpl struct {
+type ErrorImpl struct {
 	ErrType     int    `json:"err_type"`
 	ErrCode     int    `json:"err_code"`
 	ErrMsg      string `json:"err_msg"`       // User readable information
@@ -37,27 +37,47 @@ type errorImpl struct {
 	ErrHttpCode int    `json:"err_http_code"` // Http status code
 }
 
-func (e *errorImpl) Error() string {
+func (e *ErrorImpl) Error() string {
 	return e.ErrDetail
 }
 
-func (e *errorImpl) Code() int {
+func (e *ErrorImpl) Code() int {
 	return e.ErrCode
 }
 
-func (e *errorImpl) Msg() string {
+func (e *ErrorImpl) Msg() string {
 	return e.ErrMsg
 }
 
-func (e *errorImpl) ErrorType() int {
+func (e *ErrorImpl) ErrorType() int {
 	return e.ErrType
 }
 
-func (e *errorImpl) HttpCode() int {
+func (e *ErrorImpl) HttpCode() int {
 	return e.ErrHttpCode
 }
 
-func (e *errorImpl) String() string {
+func (e *ErrorImpl) SetErrType(errType int) {
+	e.ErrType = errType
+}
+
+func (e *ErrorImpl) SetErrCode(code int) {
+	e.ErrCode = code
+}
+
+func (e *ErrorImpl) SetErrMsg(msg string) {
+	e.ErrMsg = msg
+}
+
+func (e *ErrorImpl) SetErrDetail(detail string) {
+	e.ErrDetail = detail
+}
+
+func (e *ErrorImpl) SetHttpCode(code int) {
+	e.ErrHttpCode = code
+}
+
+func (e *ErrorImpl) String() string {
 	b, err := json.Marshal(e)
 	if err != nil {
 		return e.Error()
@@ -65,7 +85,7 @@ func (e *errorImpl) String() string {
 	return string(b)
 }
 
-func (e *errorImpl) Encode() error {
+func (e *ErrorImpl) Encode() error {
 	return fmt.Errorf(e.String())
 }
 
@@ -73,7 +93,7 @@ func DecodeError(err error) Error {
 	if err == nil {
 		return nil
 	}
-	herr := &errorImpl{}
+	herr := &ErrorImpl{}
 	errText := err.Error()
 	if strings.Contains(errText, "rpc error") && strings.Contains(errText, "err_msg") && strings.Contains(errText, "err_type") {
 		i := strings.Index(errText, "{")
@@ -86,7 +106,7 @@ func DecodeError(err error) Error {
 	if marshalErr := json.Unmarshal([]byte(errText), &herr); marshalErr != nil {
 		unquoteErrText, _ := strconv.Unquote("\"" + errText + "\"")
 		if marshalErr = json.Unmarshal([]byte(unquoteErrText), &herr); marshalErr != nil {
-			herr = &errorImpl{ErrCode: ServerError, ErrType: ServerError, ErrHttpCode: http.StatusInternalServerError, ErrMsg: CodeToMessage(ServerError), ErrDetail: errText}
+			herr = &ErrorImpl{ErrCode: ServerError, ErrType: ServerError, ErrHttpCode: http.StatusInternalServerError, ErrMsg: CodeToMessage(ServerError), ErrDetail: errText}
 		}
 	}
 	return herr
@@ -130,7 +150,7 @@ func NewBusinessError(code int, msg string, err error) Error {
 
 func NewError(code int, msg string, err error, errType int) Error {
 
-	e := &errorImpl{
+	e := &ErrorImpl{
 		ErrCode:   code,
 		ErrDetail: "",
 		ErrMsg:    msg,
@@ -143,6 +163,27 @@ func NewError(code int, msg string, err error, errType int) Error {
 	if text := http.StatusText(code); text != "" {
 		e.ErrHttpCode = code
 	} else {
+		e.ErrHttpCode = http.StatusOK
+	}
+
+	return e
+}
+
+func NewRawError(code int, msg string, err error, errType int, httpCode int) Error {
+
+	e := &ErrorImpl{
+		ErrCode:     code,
+		ErrDetail:   "",
+		ErrMsg:      msg,
+		ErrType:     errType,
+		ErrHttpCode: httpCode,
+	}
+
+	if err != nil {
+		e.ErrDetail = err.Error()
+	}
+
+	if e.ErrHttpCode == 0 {
 		e.ErrHttpCode = http.StatusOK
 	}
 
