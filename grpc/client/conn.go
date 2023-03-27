@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"fmt"
+	"github.com/tristan-club/kit/config"
 	"github.com/tristan-club/kit/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
@@ -35,11 +36,14 @@ func interceptor(ctx context.Context, method string, req, reply interface{}, cc 
 		traceId = ctx.Value("trace_id").(string)
 	}
 
-	log.Info().Msgf("[%s] grpc start [%s]", traceId, method)
-
+	if !config.IgnoreTraceId() {
+		log.Info().Msgf("[%s] grpc start [%s]", traceId, method)
+	}
 	err := invoker(ctx, method, req, reply, cc, opts...)
 
-	log.Info().Msgf("[%s] grpc end [%s] time spend [%d]ms", traceId, method, time.Since(start).Milliseconds())
+	if !config.IgnoreTraceId() {
+		log.Info().Msgf("[%s] grpc end [%s] time spend [%d]ms", traceId, method, time.Since(start).Milliseconds())
+	}
 
 	return err
 }

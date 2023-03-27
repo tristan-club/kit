@@ -121,7 +121,11 @@ func NewServerError(code int, msg string, err error) Error {
 		msg = CodeToMessage(code)
 	}
 	if msg == "" {
-		msg = fmt.Sprintf("unknown error, code %d", code)
+		if err != nil {
+			msg = err.Error()
+		} else {
+			msg = fmt.Sprintf("unknown error, code %d", code)
+		}
 	}
 
 	if err == nil {
@@ -129,6 +133,10 @@ func NewServerError(code int, msg string, err error) Error {
 	}
 
 	return NewError(code, msg, err, ServerError)
+}
+
+func NewStandardServerError(err error) Error {
+	return NewServerError(ServerError, "", err)
 }
 
 func NewBusinessError(code int, msg string, err error) Error {
@@ -139,6 +147,14 @@ func NewBusinessError(code int, msg string, err error) Error {
 
 	if msg == "" {
 		msg = CodeToMessage(code)
+	}
+
+	if msg == "" {
+		if err != nil {
+			msg = err.Error()
+		} else {
+			msg = fmt.Sprintf("unknown error code %d", code)
+		}
 	}
 
 	if err == nil {

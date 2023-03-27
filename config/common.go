@@ -55,3 +55,7 @@ func RedisScheduleJobKey(ServiceName string) string {
 func GetDingConfig() (string, string) {
 	return os.Getenv("DING_TOKEN"), os.Getenv("DING_SECRET")
 }
+
+func IgnoreTraceId() bool {
+	return os.Getenv("IGNORE_TRACE_ID") == "1"
+}
