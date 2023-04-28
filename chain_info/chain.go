@@ -2,9 +2,10 @@ package chain_info
 
 import (
 	"fmt"
-	"github.com/tristan-club/kit/log"
 	"os"
 	"time"
+
+	"github.com/tristan-club/kit/log"
 )
 
 const (
@@ -16,10 +17,12 @@ const (
 	ChainTypeEvmos    = 6
 	ChainTypeCronos   = 7
 	ChainTypeAurora   = 8
-	ChainTypeEthereum = 10
+	ChainTypeArbitrum = 9
+	ChainTypeConflux  = 10
+	ChainTypeEthereum = 100
 )
 
-var supportChainTypeList = []uint32{ChainTypeBsc, ChainTypeMetis, ChainTypePolygon, ChainTypeKlaytn, ChainTypeOkc, ChainTypeEvmos, ChainTypeCronos, ChainTypeAurora}
+var supportChainTypeList = []uint32{ChainTypeBsc, ChainTypeMetis, ChainTypePolygon, ChainTypeKlaytn, ChainTypeOkc, ChainTypeEvmos, ChainTypeCronos, ChainTypeAurora, ChainTypeArbitrum, ChainTypeConflux}
 
 func GetSupportChainTypeList() []uint32 {
 	return supportChainTypeList
@@ -129,6 +132,20 @@ var supportChainList = []*Chain{
 		ChainType:    ChainTypeAurora,
 		Name:         "Aurora",
 		Symbol:       "ETH",
+		CoinDecimals: 18,
+		Type:         NetworkTypeMainNet,
+	},
+	{
+		ChainType:    ChainTypeArbitrum,
+		Name:         "Arbitrum",
+		Symbol:       "ETH",
+		CoinDecimals: 18,
+		Type:         NetworkTypeMainNet,
+	},
+	{
+		ChainType:    ChainTypeConflux,
+		Name:         "Conflux",
+		Symbol:       "CFX",
 		CoinDecimals: 18,
 		Type:         NetworkTypeMainNet,
 	},
@@ -355,6 +372,30 @@ func init() {
 			NetworkName:      "Aurora Testnet",
 			RpcUrl:           "https://testnet.aurora.dev",
 			BlockExplorer:    "https://testnet.aurorascan.dev/",
+			PollingInterval:  1000,
+			AverageBlockTime: 1000,
+		},
+		{
+			ChainType:        ChainTypeArbitrum,
+			ChainId:          42161,
+			Symbol:           "ETH",
+			Decimals:         18,
+			Type:             NetworkTypeMainNet,
+			NetworkName:      "Arbitrum Mainnet",
+			RpcUrl:           "https://arb1.arbitrum.io/rpc",
+			BlockExplorer:    "https://arbiscan.io/",
+			PollingInterval:  1000,
+			AverageBlockTime: 1000,
+		},
+		{
+			ChainType:        ChainTypeConflux,
+			ChainId:          1030,
+			Symbol:           "CFX",
+			Decimals:         18,
+			Type:             NetworkTypeMainNet,
+			NetworkName:      "Conflux Mainnet",
+			RpcUrl:           "https://evm.confluxrpc.com",
+			BlockExplorer:    "https://evm.confluxscan.io/",
 			PollingInterval:  1000,
 			AverageBlockTime: 1000,
 		},
