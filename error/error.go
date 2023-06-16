@@ -164,6 +164,10 @@ func NewBusinessError(code int, msg string, err error) Error {
 	return NewError(code, msg, err, BusinessError)
 }
 
+func NewStandardBusinessError(msg string) Error {
+	return NewBusinessError(BusinessError, msg, nil)
+}
+
 func NewError(code int, msg string, err error, errType int) Error {
 
 	e := &ErrorImpl{

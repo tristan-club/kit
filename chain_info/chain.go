@@ -22,7 +22,17 @@ const (
 	ChainTypeEthereum = 100
 )
 
-var supportChainTypeList = []uint32{ChainTypeBsc, ChainTypeMetis, ChainTypePolygon, ChainTypeKlaytn, ChainTypeOkc, ChainTypeEvmos, ChainTypeCronos, ChainTypeAurora, ChainTypeArbitrum, ChainTypeConflux}
+var supportChainTypeList = []uint32{
+	ChainTypeBsc,
+	ChainTypeMetis,
+	ChainTypePolygon,
+	ChainTypeKlaytn,
+	ChainTypeOkc,
+	ChainTypeEvmos,
+	ChainTypeCronos,
+	ChainTypeAurora,
+	ChainTypeArbitrum,
+	ChainTypeConflux}
 
 func GetSupportChainTypeList() []uint32 {
 	return supportChainTypeList
