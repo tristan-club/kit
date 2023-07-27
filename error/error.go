@@ -93,7 +93,13 @@ func DecodeError(err error) Error {
 	if err == nil {
 		return nil
 	}
-	herr := &ErrorImpl{}
+
+	herr, ok := err.(*ErrorImpl)
+	if ok {
+		return herr
+	}
+	herr = &ErrorImpl{}
+
 	errText := err.Error()
 	if strings.Contains(errText, "rpc error") && strings.Contains(errText, "err_msg") && strings.Contains(errText, "err_type") {
 		i := strings.Index(errText, "{")
