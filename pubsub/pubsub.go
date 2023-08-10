@@ -1,12 +1,13 @@
 package pubsub
 
 import (
-	"cloud.google.com/go/pubsub"
 	"context"
 	"encoding/json"
-	"github.com/tristan-club/kit/log"
 	"os"
 	"time"
+
+	"cloud.google.com/go/pubsub"
+	"github.com/tristan-club/kit/log"
 )
 
 var projectID = ""
@@ -21,8 +22,7 @@ func Publish(tag string, data map[string]interface{}) {
 }
 
 func PublishTopic(topic string, tag string, data map[string]interface{}) {
-	if clientErr != nil {
-		log.Error().Msgf("pubsub client error: %s", clientErr)
+	if client == nil {
 		return
 	}
 
@@ -66,4 +66,9 @@ func Init() {
 	}
 
 	client, clientErr = pubsub.NewClient(ctx, projectID)
+	if clientErr != nil {
+		client = nil
+		log.Error().Msgf("pubsub client error: %s", clientErr)
+		return
+	}
 }
