@@ -10,7 +10,6 @@ require (
 	github.com/gomodule/redigo v1.8.9
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
-	github.com/ratpoison4/entities v0.0.0-20200816180712-2934dd77c7d7
 	github.com/robfig/cron v1.2.0
 	github.com/rs/zerolog v1.27.0
 	github.com/satori/go.uuid v1.2.0
@@ -32,7 +31,6 @@ require (
 	github.com/googleapis/gax-go/v2 v2.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/shopspring/decimal v1.2.0 // indirect
 	go.opencensus.io v0.23.0 // indirect
@@ -43,6 +41,5 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220624142145-8cd45d7dbd1f // indirect
-	gopkg.in/tucnak/telebot.v2 v2.5.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 )
