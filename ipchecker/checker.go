@@ -2,6 +2,7 @@ package ipchecker
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/tristan-club/kit/config"
 	"github.com/tristan-club/kit/log"
 	"net/http"
 	"strings"
@@ -22,7 +23,9 @@ func GetRealIP(r *http.Request) string {
 func GetRealIPFromGin(c *gin.Context) string {
 	realIP := GetRealIP(c.Request)
 	if realIP == "" {
-		log.Error().Fields(map[string]interface{}{"action": "get real ip from x-forwarded-for failed", "request": c.Request}).Send()
+		if !config.EnvIsDev() {
+			log.Error().Fields(map[string]interface{}{"action": "get real ip from x-forwarded-for failed", "header": c.Request.Header}).Send()
+		}
 		realIP = c.ClientIP()
 	}
 	return realIP
