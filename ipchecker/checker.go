@@ -1,6 +1,8 @@
 package ipchecker
 
 import (
+	"github.com/gin-gonic/gin"
+	"github.com/tristan-club/kit/log"
 	"net/http"
 	"strings"
 )
@@ -14,5 +16,14 @@ func GetRealIP(r *http.Request) string {
 	ipList := strings.Split(xForwardedFor, ",")
 	// 取列表中的最后一个 IP
 	realIP := strings.TrimSpace(ipList[len(ipList)-1])
+	return realIP
+}
+
+func GetRealIPFromGin(c *gin.Context) string {
+	realIP := GetRealIP(c.Request)
+	if realIP == "" {
+		log.Error().Fields(map[string]interface{}{"action": "get real ip from x-forwarded-for failed", "request": c.Request}).Send()
+		realIP = c.ClientIP()
+	}
 	return realIP
 }
