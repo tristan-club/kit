@@ -59,3 +59,7 @@ func GetDingConfig() (string, string) {
 func IgnoreTraceId() bool {
 	return os.Getenv("IGNORE_TRACE_ID") == "1"
 }
+
+func IgnoreIPFake() bool {
+	return os.Getenv("IGNORE_IP_FAKE") == "1"
+}

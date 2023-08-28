@@ -1,11 +1,12 @@
 package ipchecker
 
 import (
+	"net/http"
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/tristan-club/kit/config"
 	"github.com/tristan-club/kit/log"
-	"net/http"
-	"strings"
 )
 
 // GetRealIP retrieves the user's real IP address.
@@ -30,6 +31,9 @@ func GetRealIPFromGin(c *gin.Context) string {
 		if !config.EnvIsDev() {
 			log.Error().Fields(map[string]interface{}{"action": "get real ip from x-forwarded-for failed", "header": c.Request.Header}).Send()
 		}
+		realIP = c.ClientIP()
+	}
+	if config.IgnoreIPFake() {
 		realIP = c.ClientIP()
 	}
 	return realIP
