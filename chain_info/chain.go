@@ -438,7 +438,7 @@ func init() {
 			supportChainNetList[k].ExplorerApiKey = os.Getenv("EXPLORER_API_KEY_POLYGON")
 		}
 
-		if url := os.Getenv(fmt.Sprintf("%d_RPC_URL", supportChainNetList[k].ChainId)); url != "" {
+		if url := os.Getenv(fmt.Sprintf("RPC_URL_%d", supportChainNetList[k].ChainId)); url != "" {
 			supportChainNetList[k].RpcUrl = url
 		}
 	}
