@@ -17,8 +17,10 @@ func GetRealIP(r *http.Request) string {
 	xForwardedFor := r.Header.Get("X-Forwarded-For")
 	ipList := strings.Split(xForwardedFor, ",")
 	// 取列表中的最后一个 IP
-	if len(ipList) < 2 && !config.EnvIsDev() {
-		log.Error().Fields(map[string]interface{}{"action": "invalid node balance ip", "forward": xForwardedFor}).Send()
+	if len(ipList) < 2 {
+		if !config.EnvIsDev() {
+			log.Error().Fields(map[string]interface{}{"action": "invalid node balance ip", "forward": xForwardedFor}).Send()
+		}
 		return ""
 	}
 	realIP := strings.TrimSpace(ipList[len(ipList)-2])
