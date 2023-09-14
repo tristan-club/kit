@@ -195,6 +195,10 @@ func NewError(code int, msg string, err error, errType int) Error {
 	return e
 }
 
+func NewMsgError(code, httpCode, errType int, msg string) Error {
+	return NewRawError(code, msg, fmt.Errorf(msg), errType, httpCode)
+}
+
 func NewRawError(code int, msg string, err error, errType int, httpCode int) Error {
 
 	e := &ErrorImpl{
