@@ -177,7 +177,7 @@ func CalCpfp(txID string, childTxSizeVb float64, desiredFeeRate float64) (*CalCp
 			}
 		}
 
-		if len(vinCpfpData) == 0 {
+		if len(vinCpfpData) == 0 && childTxSizeVb == 0 {
 			return nil, fmt.Errorf("The transaction has already been confirmed or has no unconfirmed ancestors. ")
 		}
 
